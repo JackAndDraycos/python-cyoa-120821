@@ -1,24 +1,19 @@
 class creature:
-    def __init__(self,name,spec,weapon,armor):
+    def __init__(self,name,spec,weapon,armor,str,agi,intel,points):
         self.name = name
         self.spec = spec
         self.weapon = weapon
         self.armor = armor
+        self.str = str
+        self.agi = agi
+        self.intel = intel
+        self.points = points
         if spec == "Warrior":
             self.health = 10
         elif spec == "Rogue":
             self.health = 8
         elif spec == "Mage":
             self.health = 6
-        else:
-            print("Pick a class")
-            
-    def update_char(self, name,spec,weapon,armor):
-        self.setName(name)
-        self.setClass(spec)
-        self.setWeapon(weapon)
-        self.setArmor(armor)
-        print(self.getArmor)
     
     def setName(self, name):
         self.name = name
@@ -43,6 +38,46 @@ class creature:
         
     def getArmor(self):
         return self.armor
+    
+    def updateStat(self,stat,mode):
+        if mode == "+":
+            if stat == "str":
+                if self.str < 5 and self.points > 0:
+                    self.str+=1
+                    self.points-=1
+            elif stat == "agi":
+                if self.agi < 5 and self.points > 0:
+                    self.agi+=1
+                    self.points-=1
+            else:
+                if self.intel < 5 and self.points > 0:
+                    self.intel+=1
+                    self.points-=1
+        else:
+            if stat == "str":
+                if self.str > -5:
+                    self.str-=1
+                    self.points+=1
+            elif stat == "agi":
+                if self.agi > -5:
+                    self.agi-=1
+                    self.points+=1
+            else:
+                if self.intel > -5:
+                    self.intel-=1
+                    self.points+=1
+    
+    def getStr(self):
+        return self.str
+        
+    def getAgi(self):
+        return self.agi
+        
+    def getIntel(self):
+        return self.intel
+    
+    def getPoints(self):
+        return self.points
             
 classes = (
     'Warrior',

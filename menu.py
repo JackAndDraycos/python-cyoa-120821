@@ -7,7 +7,7 @@ root.title("First Game")
 root.geometry("1280x720")
 root.option_add("*Font", "Papyrus")
 
-player = creature("","","Fists","Clothing/Robes")
+player = creature("","","Fists","Clothing/Robes",0,0,0,5)
 
 def clear_screen():
     for widget in root.winfo_children():
@@ -26,6 +26,12 @@ def play():
     uWeapon.grid(row=3,column=2)
     uArmor=Label(root, text="Armor: " + player.getArmor())
     uArmor.grid(row=4,column=2)
+    uStr=Label(root, text="Strength: " + str(player.getStr()))
+    uStr.grid(row=5,column=2)
+    uAgi=Label(root, text="Agility: " + str(player.getAgi()))
+    uAgi.grid(row=6,column=2)
+    uIntel=Label(root, text="Intelligence: " + str(player.getIntel()))
+    uIntel.grid(row=7,column=2)
     Button(root,text="Return",command=__menuInit__,fg='#ffffff',bg='#000000').grid(row=0,column=0)
     Label(root, text="").grid(row=1,column=0)
     Label(root, text="Name: ").grid(row=2,column=0)
@@ -48,21 +54,39 @@ def play():
     armor_pick.grid(row=5,column=1)
     
     Label(root, text="").grid(row=6,column=0)
-    Label(root, text="Strength: ").grid(row=8,column=0)
-    Label(root, text=0).grid(row=8,column=1)
-    Button(root, text="Inc").grid(row=7,column=1)
-    Button(root, text="Dec").grid(row=9,column=1)
-    Label(root, text="Agility: ").grid(row=11,column=0)
-    Label(root, text=0).grid(row=11,column=1)
-    Button(root, text="Inc").grid(row=10,column=1)
-    Button(root, text="Dec").grid(row=12,column=1)
-    Label(root, text="Intelligence: ").grid(row=14,column=0)
-    Label(root, text=0).grid(row=14,column=1)
-    Button(root, text="Inc").grid(row=13,column=1)
-    Button(root, text="Dec").grid(row=15,column=1)
-    Button(root,text="Update",command=lambda:update_char(char_name.get(),c.get(),w.get(),a.get(),uName,uClass,uWeapon,uArmor),fg='#ffffff',bg='#000000').grid(row=17,column=0)
-    
-def update_char(name,spec,weapon,armor,uName,uClass,uWeapon,uArmor):
+    Label(root, text="Points: ").grid(row=7,column=0)
+    points = Label(root, text=player.getPoints())
+    points.grid(row=7,column=1)
+    Label(root, text="Strength: ").grid(row=9,column=0)
+    stre = Label(root, text=player.getStr())
+    stre.grid(row=9,column=1)
+    Button(root, text="Inc", command=lambda:updateStat(stre,"str","+",points)).grid(row=8,column=1)
+    Button(root, text="Dec", command=lambda:updateStat(stre,"str","-",points)).grid(row=10,column=1)
+    Label(root, text="Agility: ").grid(row=12,column=0)
+    agil = Label(root, text=player.getAgi())
+    agil.grid(row=12,column=1)
+    Button(root, text="Inc", command=lambda:updateStat(agil,"agi","+",points)).grid(row=11,column=1)
+    Button(root, text="Dec", command=lambda:updateStat(agil,"agi","-",points)).grid(row=13,column=1)
+    Label(root, text="Intelligence: ").grid(row=15,column=0)
+    intel = Label(root, text=player.getIntel())
+    intel.grid(row=15,column=1)
+    Button(root, text="Inc", command=lambda:updateStat(intel,"intel","+",points)).grid(row=14,column=1)
+    Button(root, text="Dec", command=lambda:updateStat(intel,"intel","-",points)).grid(row=16,column=1)
+    Button(root,text="Update",command=lambda:update_char(char_name.get(),c.get(),w.get(),a.get(),uName,uClass,uWeapon,uArmor,uStr,uAgi,uIntel),fg='#ffffff',bg='#000000').grid(row=17,column=0)
+     
+def updateStat(label,stat,mode,points):
+    if stat == "str":
+        player.updateStat(stat,mode)
+        label.config(text=player.getStr())
+    elif stat == "agi":
+        player.updateStat(stat,mode)
+        label.config(text=player.getAgi())
+    else:
+        player.updateStat(stat,mode)
+        label.config(text=player.getIntel())
+    points.config(text=player.getPoints())
+
+def update_char(name,spec,weapon,armor,uName,uClass,uWeapon,uArmor,uStr,uAgi,uIntel):
     player.setName(name)
     player.setClass(spec)
     player.setWeapon(weapon)
@@ -71,6 +95,9 @@ def update_char(name,spec,weapon,armor,uName,uClass,uWeapon,uArmor):
     uClass.config(text="Class: " + player.getClass())
     uWeapon.config(text="Weapon: " + player.getWeapon())
     uArmor.config(text="Armor: " + player.getArmor())
+    uStr.config(text="Strength: " + str(player.getStr()))
+    uAgi.config(text="Agility: " + str(player.getAgi()))
+    uIntel.config(text="Intelligence: " + str(player.getIntel()))
     
 #TODO
 def load():
