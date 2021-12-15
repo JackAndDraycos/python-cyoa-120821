@@ -1,0 +1,11 @@
+0
+0
+0
+You shut your eyes and try to get some shut eye, but you are still unable to sleep.
+2
+Attempt to go to sleep.
+3
+Go and investigate.
+2
+
+2

@@ -8,23 +8,36 @@ class creature:
         self.agi = 0
         self.intel = 0
         self.points = 5
-        self.health = 0
+        self.currHealth = 0
+        self.maxHealth = 0
         self.maxDam = 1
         self.accuracy = 0
         self.dodge = 10
         self.defense = 0
+        self.page = "1"
     
     def setName(self, name):
         self.name = name
         
-    def setHealth(self,spec):
-        if spec == "Warrior":
-            self.health = 10
-        elif spec == "Rogue":
-            self.health = 8
-        elif spec == "Mage":
-            self.health = 6
-        self.health+=self.str
+    def setHealth(self,spec,mode,change):
+        #init
+        if mode == 0:
+            if spec == "Warrior":
+                self.maxHealth = 10
+            elif spec == "Rogue":
+                self.maxHealth = 8
+            elif spec == "Mage":
+                self.maxHealth = 6
+            self.maxHealth+=self.str
+            self.currHealth = self.maxHealth
+        #heal
+        elif mode == 1:
+            self.currHealth += change
+            if self.currHealth > self.maxHealth:
+                self.currHealth = self.maxHealth
+        #damaged
+        else:
+            self.currHealth -= change
         
     def setClass(self, spec):
         self.spec = spec
@@ -44,11 +57,18 @@ class creature:
     def setDefense(self, defense):
         self.defense = defense
         
+    #TODO
+    def setPage():
+        return
+        
     def getName(self):
         return self.name
     
-    def getHealth(self):
-        return self.health
+    def getCurrHealth(self):
+        return self.currHealth
+    
+    def getMaxHealth(self):
+        return self.maxHealth
         
     def getClass(self):
         return self.spec
@@ -68,13 +88,16 @@ class creature:
     def getDefense(self):
         return self.defense
     
+    def getPage(self, page):
+        return self.page
+    
     def updateStat(self,stat,mode):
         if mode == "+":
             if stat == "str":
                 if self.str < 5 and self.points > 0:
                     self.str+=1
                     self.points-=1
-                    self.health+=1
+                    self.maxHealth+=1
             elif stat == "agi":
                 if self.agi < 5 and self.points > 0:
                     self.agi+=1
@@ -89,7 +112,7 @@ class creature:
                 if self.str > -5:
                     self.str-=1
                     self.points+=1
-                    self.health-=1
+                    self.maxHealth-=1
             elif stat == "agi":
                 if self.agi > -5:
                     self.agi-=1

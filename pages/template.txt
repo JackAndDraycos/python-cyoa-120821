@@ -1,0 +1,12 @@
+1. check flag
+2. check DC
+3. fail page to
+4. story
+5. page to opt1
+6. opt1
+7. page to opt2
+8. opt2
+9. page to opt3
+10. opt3
+11. page to opt4
+12. opt4

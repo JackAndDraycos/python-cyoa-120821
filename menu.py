@@ -30,7 +30,7 @@ def play():
     uName.grid(row=1,column=2)
     uClass=Label(root, text="Class: " + player.getClass())
     uClass.grid(row=2,column=2)
-    uHealth=Label(root, text="Health: " + str(player.getHealth()))
+    uHealth=Label(root, text="Health: " + str(player.getMaxHealth()))
     uHealth.grid(row=3,column=2)
     uWeapon=Label(root, text="Weapon: " + player.getWeapon())
     uWeapon.grid(row=4,column=2)
@@ -91,7 +91,68 @@ def play():
     Button(root,text="Update",command=lambda:update_char
            (char_name.get(),c.get(),w.get(),a.get(),uName,uHealth,uClass,uWeapon,uArmor,uStr,uAgi,uIntel,w,uDam,uAccu,a,uDodge,uDef),
            fg='#ffffff',bg='#000000').grid(row=17,column=0)
+    Button(root,text="Play",command=begin,fg='#ffffff',bg='#000000').grid(row=17,column=1)
      
+#TODO this is essentially save
+def begin():
+    f = open(".\chars\player.txt", "w")
+    f.writelines(player.getName() + '\n')
+    f.writelines(player.getClass() + '\n')
+    f.writelines(str(player.getCurrHealth()) + '\n')
+    f.writelines(str(player.getMaxHealth()) + '\n')
+    f.writelines(player.getWeapon() + '\n')
+    f.writelines(str(player.getDamage()) + '\n')
+    f.writelines(player.getArmor() + '\n')
+    f.writelines(str(player.getDodge()) + '\n')
+    f.writelines(str(player.getDefense()) + '\n')
+    f.writelines(str(player.getStr()) + '\n')
+    f.writelines(str(player.getAgi()) + '\n')
+    f.writelines(str(player.getIntel()) + '\n')
+    f.writelines("1")
+    f.close()
+    loadPage(player.getPage("1"))
+    
+def loadPage(page):
+    clear_screen()
+    root.rowconfigure(0,weight=3)
+    root.rowconfigure(1,weight=1)
+    root.rowconfigure(2,weight=1)
+    root.columnconfigure(0,weight=1)
+    root.columnconfigure(1,weight=3)
+    root.columnconfigure(2,weight=1)
+    f = open(".\pages\\" + page + ".txt", "r")
+    flag = f.readline().rstrip()
+    check = 0
+    if flag != "0":
+        #strength check
+        if flag == "1":
+            check = randrange(1,20) + player.getStr()
+        #agility check
+        elif flag == "2":
+            check = randrange(1,20) + player.getAgi()
+        #intelligence check
+        elif flag == "3":
+            check = randrange(1,20) + player.getIntel()
+        if check < int(f.readline().rstrip()):
+            newPage = f.readline().rstrip()
+            f.close()
+            loadPage(newPage)
+    else:
+        f.readline()
+        f.readline()
+    Label(root, text=f.readline().rstrip()).grid(row=0,column=1)
+    opt1=f.readline().rstrip()
+    Button(root,text=f.readline().rstrip(),command=lambda:loadPage(opt1),fg='#ffffff',bg='#000000').grid(row=1,column=0)
+    opt2=f.readline().rstrip()
+    Button(root,text=f.readline().rstrip(),command=lambda:loadPage(opt2),fg='#ffffff',bg='#000000').grid(row=1,column=2)
+    opt3=f.readline().rstrip()
+    Button(root,text=f.readline().rstrip(),command=lambda:loadPage(opt3),fg='#ffffff',bg='#000000').grid(row=2,column=0)
+    opt4=f.readline().rstrip()
+    Button(root,text=f.readline().rstrip(),command=lambda:loadPage(opt4),fg='#ffffff',bg='#000000').grid(row=2,column=2)
+    f.close()
+    
+
+#Changes stat number as Inc/Dec buttons pushed
 def updateStat(label,stat,mode,points):
     if stat == "str":
         player.updateStat(stat,mode)
@@ -104,15 +165,16 @@ def updateStat(label,stat,mode,points):
         label.config(text=player.getIntel())
     points.config(text=player.getPoints())
 
+#Updates right side text with changed values manipulated by player on left
 def update_char(name,spec,weapon,armor,uName,uHealth,uClass,uWeapon,uArmor,uStr,uAgi,uIntel,w,uDam,uAccu,a,uDodge,uDef):
     player.setName(name)
-    player.setHealth(spec)
+    player.setHealth(spec,0,0)
     player.setClass(spec)
     player.setWeapon(weapon)
     player.setArmor(armor)
     uName.config(text="Name: " + player.getName())
     uClass.config(text="Class: " + player.getClass())
-    uHealth.config(text="Health: " + str(player.getHealth()))
+    uHealth.config(text="Health: " + str(player.getMaxHealth()))
     uWeapon.config(text="Weapon: " + player.getWeapon())
     uArmor.config(text="Armor: " + player.getArmor())
     uStr.config(text="Strength: " + str(player.getStr()))
