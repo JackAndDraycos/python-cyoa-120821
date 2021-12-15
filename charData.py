@@ -30,8 +30,14 @@ class creature:
                 self.maxHealth = 6
             self.maxHealth+=self.str
             self.currHealth = self.maxHealth
-        #heal
+        #loading character current health
         elif mode == 1:
+            self.currHealth = change
+        #loading character max health
+        elif mode == 2:
+            self.maxHealth = change
+        #heal
+        elif mode == 3:
             self.currHealth += change
             if self.currHealth > self.maxHealth:
                 self.currHealth = self.maxHealth
@@ -57,9 +63,17 @@ class creature:
     def setDefense(self, defense):
         self.defense = defense
         
-    #TODO
-    def setPage():
-        return
+    def setPage(self, page):
+        self.page = page
+        
+    def setStr(self, stren):
+        self.str = stren
+        
+    def setAgi(self, agi):
+        self.agi = agi
+        
+    def setIntel(self, intel):
+        self.intel = intel
         
     def getName(self):
         return self.name
@@ -88,7 +102,7 @@ class creature:
     def getDefense(self):
         return self.defense
     
-    def getPage(self, page):
+    def getPage(self):
         return self.page
     
     def updateStat(self,stat,mode):
