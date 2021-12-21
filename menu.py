@@ -1,6 +1,7 @@
 import random
 import tkinter
 import charData
+from tkinter import messagebox
 root = tkinter.Tk()
 root.title("First Game")
 root.geometry("1280x720")
@@ -51,7 +52,7 @@ def createChar():
     uIntel.grid(row=12,column=2)
     
     #Name entry and drop downs for gear - Left Side
-    tkinter.Button(root,text="Return",command=__menuInit__,fg='#ffffff',bg='#000000').grid(row=0,column=0)
+    tkinter.Button(root,text="Return",command=mainMenu,fg='#ffffff',bg='#000000').grid(row=0,column=0)
     tkinter.Label(root, text="").grid(row=1,column=0)
     tkinter.Label(root, text="Name: ").grid(row=2,column=0)
     char_name = tkinter.Entry(root)
@@ -89,10 +90,9 @@ def createChar():
     tkinter.Button(root,text="Update",command=lambda:update_char
            (char_name.get(),c.get(),w.get(),a.get(),uName,uHealth,uClass,uWeapon,uArmor,uStr,uAgi,uIntel,w,uDam,uAccu,a,uDodge,uDef),
            fg='#ffffff',bg='#000000').grid(row=17,column=0)
-    tkinter.Button(root,text="Play",command=begin,fg='#ffffff',bg='#000000').grid(row=17,column=1)
+    tkinter.Button(root,text="Play",command=lambda:save(0),fg='#ffffff',bg='#000000').grid(row=17,column=1)
      
-#TODO this is essentially save
-def begin():
+def save(mode):
     f = open(".\chars\player.txt", "w")
     f.writelines(player.getName() + '\n')
     f.writelines(player.getClass() + '\n')
@@ -108,10 +108,22 @@ def begin():
     f.writelines(str(player.getIntel()) + '\n')
     f.writelines(player.getPage())
     f.close()
-    loadPage(player.getPage())
+    if mode == 0:
+        loadPage(player.getPage())
+        
+def popup():
+    choice = messagebox.askokcancel("Quit","Any unsaved progress will be lost. Are you sure you want to quit?")
+    if choice:
+        mainMenu()
     
 def loadPage(page):
     clear_screen()
+    myMenu = tkinter.Menu(root)
+    root.config(menu = myMenu)
+    fileMenu = tkinter.Menu(myMenu)
+    myMenu.add_cascade(label="File",menu=fileMenu)
+    fileMenu.add_command(label="Save",command=lambda:save(1))
+    fileMenu.add_command(label="Quit to Menu",command=popup)
     root.rowconfigure(0,weight=3)
     root.rowconfigure(1,weight=1)
     root.rowconfigure(2,weight=1)
@@ -213,13 +225,16 @@ def load():
 def credits():
     clear_screen()
     tkinter.Label(root,text="Programmer: JackAndDraycos",padx=30,pady=30,bg="#555555",font=("Papyrus", 60)).grid(row=0,column=0)
-    tkinter.Button(root,text="Return",command=__menuInit__,padx=10,pady=10,fg='#ffffff',bg='#000000').grid(row=1,column=0)
+    tkinter.Button(root,text="Return",command=mainMenu,padx=10,pady=10,fg='#ffffff',bg='#000000').grid(row=1,column=0)
 
-def __menuInit__():
+def mainMenu():
     clear_screen()
     root.rowconfigure(0,weight=1)
     root.columnconfigure(0,weight=1)
     root.columnconfigure(2,weight=0)
+    root.rowconfigure(1,weight=0)
+    root.rowconfigure(2,weight=0)
+    root.columnconfigure(1,weight=0)
     title = tkinter.Label(root, text="Fantasma",padx=30,pady=30,bg="#555555")
     title.config(font=("Papyrus", 60))
 
@@ -234,5 +249,5 @@ def __menuInit__():
     credits_button.grid(row=3,column=0)
     exit_button.grid(row=4,column=0)
 
-__menuInit__()
+mainMenu()
 root.mainloop()
